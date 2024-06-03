@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-mumbai-ssd
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+  fstype: ext4
+  replication-type: none
+  zone: asia-south1-a

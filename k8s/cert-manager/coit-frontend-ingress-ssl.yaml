@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: coit-frontend
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - basil.com.34.93.5.66.sslip.io
+    secretName:  basil.com.34.93.5.66.sslip.io
+  rules:
+  - host: basil.com.34.93.5.66.sslip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: coit-frontend-lb
+            port:
+              number: 80
