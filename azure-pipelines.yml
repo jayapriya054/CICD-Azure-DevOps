@@ -46,9 +46,10 @@ steps:
 
 - task: Kubernetes@1
   inputs:
-    connectionType: Kubernetes
+    connectionType: 'Kubernetes Service Connection'
     namespace: default
     command: 'apply'
     configuration: 'k8s/simple'
+    kubernetesServiceEndpoint: 'Kubernetes'
 
 
