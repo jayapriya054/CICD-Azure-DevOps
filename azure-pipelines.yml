@@ -1,3 +1,4 @@
+
 # Node.js
 # Build a general Node.js project with npm.
 # Add steps that analyze code, save build artifacts, deploy, and more:
@@ -25,7 +26,7 @@ steps:
   displayName: 'npm install and build'
   
 - script: |
-    docker build -t jayapriya054/demo-frontend:latest . -f Dockerfile
+    docker build -t jayapriya054/demo-frontend:$(Build.BuildId) . -f Dockerfile
   displayName: 'build container image'
 
 - script: |
@@ -52,6 +53,33 @@ steps:
     command: 'apply'
     configuration: 'k8s/simple'
     arguments: -f .
-    
+
+- script: |
+    sleep 60
+  displayName: 'Wait for load balancer to come up'
+
+- script: |
+    set -i "s/jayapriya054/demo-frontend:latest/jayapriya054/demo-frontend:$(Build.BuildId)/g"/k8s/simple/frontend-deployment.yaml
+    git add k8s/simple/frontend-deployment.yaml
+    git commit -m "Uploaded the deployment manifest with image name $(Build.BuildId)"
+    git push origin main
+
+- task: Kubernetes@1
+  inputs:
+    connectionType: 'Kubernetes Service Connection'
+    kubernetesServiceEndpoint: 'Kubernetes'
+    namespace: default
+    command: 'apply'
+    configuration: 'k8s/simple'
+    arguments: service coit-frontend-lb
+
+# - task: Kubernetes@1
+#  inputs:
+#   connectionType: 'Kubernetes Service Connection'
+#   kubernetesServiceEndpoint: 'Kubernetes'
+#   namespace: default
+#   command: 'set'
+#   configuration: 'k8s/simple'
+#   arguments: image deployment coit-frontend jayapriya054/demo-frontend=jayapriya054/demo-frontend:$(Build.BuildId)
 
 
