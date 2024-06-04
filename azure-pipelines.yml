@@ -51,6 +51,7 @@ steps:
     namespace: default
     command: 'apply'
     configuration: 'k8s/simple'
+    arguments: -f .
     
 
 
