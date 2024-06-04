@@ -29,5 +29,9 @@ steps:
   displayName: 'build container image'
 
 - script: |
-    docker run jayapriya054/demo-frontend:latest
+    docker run -d jayapriya054/demo-frontend:latest
   displayName: 'Run the application'
+
+- script: |
+    docker ps
+  displayName: 'Verify container is running'
